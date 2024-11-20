@@ -1,0 +1,17 @@
+<div class="concept-widget panel-group" id="sksAccordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingSks">
+            <button class="accordion-button{{#unless opened}} collapsed{{/unless}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSks" aria-expanded="{{opened}}" aria-controls="collapseSks">
+                {{sksCaption}}
+            </button>
+        </div>
+        <div id="collapseSks" class="panel-collapse collapse{{#if opened}} show{{/if}}" role="tabpanel" aria-labelledby="headingSks">
+            <div class="panel-body">
+                <div id="sks-description-text-block">{{sksDescriptionText}}</div>
+                <div id="sks" class="panel position-sticky" role="tabpanel" aria-labelledby="headingSks">
+                    <iframe src="{{sksURN}}"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

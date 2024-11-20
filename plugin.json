@@ -1,0 +1,6 @@
+{
+    "js": ["widget.js"],
+    "callback": ["sksWidget"],
+    "css": ["stylesheet.css"],
+    "templates": ["template.html"]
+}

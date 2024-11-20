@@ -1,0 +1,73 @@
+/*
+ * Stylesheet for the widget. Designed for finto.fi. *
+ *   */
+#sksAccordion.concept-widget {
+    border-top: 2px solid #394554;
+    margin-bottom: 20px;
+}
+
+#sksAccordion.concept-widget > .panel {
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+}
+
+#collapseSks > .panel-body {
+    padding: 0;
+    border-top: 0;
+    background: var(--gray-200);
+}
+
+#sks-description-text-block {
+    background-color: #fff;
+    padding-top: 0.5rem;
+    padding-right: 1rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+    border-bottom: 2px solid #d4edeb;
+    font-size: var(--font-size);
+    color: var(--gray-900);
+    --font-family: 'Fira Sans', sans-serif;
+    background-image: url("../finto-pics/about.png");
+    background-repeat: no-repeat;
+    background-size: 16px 16px;
+    background-position-x: 1em;
+    background-position-y: 10px;
+    padding-left: 33px;
+}
+
+#sks {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    height: 400px;
+    overflow: hidden;
+}
+
+#sks > * {
+    height: 100%;
+    width: 100%;
+}
+
+#sksSpinner {
+    background: url("../../resource/pics/alt.gif") no-repeat transparent;
+    background-position: center 140px;
+    padding-top: 190px;
+    color: #474b4f;
+}
+
+#headingSks {
+    background-color: #fff;
+    font-size: 16px;
+    border-bottom: 1px solid #bbb;
+    --font-family: 'Fira Sans', sans-serif;
+}
+
+#headingSks .accordion-button {
+    color: var(--medium-color);
+    background-color: var(--white);
+    padding-top: 0.5rem;
+    padding-right: 1rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+}
