@@ -5,7 +5,7 @@ SKS = {
     address: "", // to be updated
     getTranslation: function (key) {
         var getLang = lang;
-        if (lang !== "fi" && lang !== "sv") {
+        if (lang !== "fi" && lang !== "sv" && lang !== "se") {
             getLang = "en";
         }
         if (key === "sksCaption") {
@@ -13,14 +13,16 @@ SKS = {
             return {
                 "fi": "Kansallisbiografia (SKS) > " + pref,
                 "sv": "Finlands nationalbiografi (SKS) > " + pref, 
-                "en": "The National Biography of Finland (SKS) > " + pref
+                "en": "The National Biography of Finland (SKS) > " + pref,
+                "se": "Kansallisbiografia - Álbmotbiografiija (SKS) > " + pref
             }[getLang];
         }
         if (key === "sksDescriptionText") {
             return {
                 "fi": "Kaikki artikkelitiivistelmät ja osa artikkeleista vapaasti saatavilla. Pääsy muihin artikkeleihin vain lisenssillä.",
                 "sv": "Alla artikelsammandrag och en del av artiklarna är fritt tillgängliga. Tillgång till andra artiklar kräver licens.", 
-                "en": "All article summaries and some complete articles are freely available. Accessing other articles requires a license."
+                "en": "All article summaries and some complete articles are freely available. Accessing other articles requires a license.",
+                "se": "Buot artihkalčoahkkáigeasut ja oassi artihkkaliin friija oažžunsajis. Beassan eará artihkkaliidda dušše liseanssain."
             }[getLang];
         }
         else {
@@ -80,7 +82,7 @@ $(function() {
         // 2) and there is a prefLabel
         // 3) and the json-ld data can be found
         // 4) and the latitude and longitude are defined
-        if (data.page !== 'page' || data.prefLabels === undefined || $.isEmptyObject(data["json-ld"])) {
+        if (data.page !== 'page' || data.prefLabels === undefined || $.isEmptyObject(data["json-ld"])) {
             return;
         }
 
