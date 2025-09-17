@@ -120,7 +120,6 @@ $(function() {
 
         if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
             // single object value with SKS URN, proceed to render
-            console.log("sks");
             SKS.address = '//kansallisbiografia.fi/kansallisbiografia/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
             SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
             SKS.caption = SKS.getTranslation("kansallisbiografia");
@@ -128,7 +127,6 @@ $(function() {
         }
         else if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
             // single object value with SKS URN, proceed to render
-            console.log("papisto");
             SKS.address = '//kansallisbiografia.fi/papisto/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
             SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
             SKS.caption = SKS.getTranslation("papisto");
@@ -136,7 +134,6 @@ $(function() {
         }
         else if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
             // single object value with SKS URN, proceed to render
-            console.log("paimenmuisto");
             SKS.address = '//kansallisbiografia.fi/paimenmuisto/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
             SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
             SKS.caption = SKS.getTranslation("paimenmuisto");
