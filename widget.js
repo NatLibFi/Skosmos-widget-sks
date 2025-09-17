@@ -29,10 +29,10 @@ SKS = {
         if (key === "paimenmuisto") {
             var pref = SKS.preferred_label + $("#pref-label + .prefLabelLang").text();
             return {
-                "fi": "Turun hiippakunnan paimenmuisto 1554–1721 (SKS) > " + pref,
-                "sv": "Turun hiippakunnan paimenmuisto 1554–1721 (SKS) > " + pref,
-                "en": "Turun hiippakunnan paimenmuisto 1554–1721 (SKS) > " + pref,
-                "se": "Turku bismagotti báimmanmuitu 1554-1721 (SKS) > " + pref
+                "fi": "Turun hiippakunnan paimenmuisto (SKS) > " + pref,
+                "sv": "Åbo stifts herdaminne (SKS) > " + pref,
+                "en": "Biographical register of clergy of the Turku Diocese (SKS) > " + pref,
+                "se": "Turku bismagotti báimmanmuitu (SKS) > " + pref
             }[getLang];
         }
         if (key === "sksDescriptionText") {
