@@ -8,13 +8,31 @@ SKS = {
         if (lang !== "fi" && lang !== "sv" && lang !== "se") {
             getLang = "en";
         }
-        if (key === "sksCaption") {
+        if (key === "kansallisbiografia") {
             var pref = SKS.preferred_label + $("#pref-label + .prefLabelLang").text();
             return {
                 "fi": "Kansallisbiografia (SKS) > " + pref,
                 "sv": "Finlands nationalbiografi (SKS) > " + pref, 
                 "en": "The National Biography of Finland (SKS) > " + pref,
                 "se": "Kansallisbiografia - Álbmotbiografiija (SKS) > " + pref
+            }[getLang];
+        }
+        if (key === "papisto") {
+            var pref = SKS.preferred_label + $("#pref-label + .prefLabelLang").text();
+            return {
+                "fi": "Suomen papisto 1800–1920 (SKS) > " + pref,
+                "sv": "Finlands prästerskap 1800–1920 (SKS) > " + pref,
+                "en": "The clergy of Finland 1800–1920 (SKS) > " + pref,
+                "se": "Suoma páhppagoddi 1800–1920 (SKS) > " + pref
+            }[getLang];
+        }
+        if (key === "paimenmuisto") {
+            var pref = SKS.preferred_label + $("#pref-label + .prefLabelLang").text();
+            return {
+                "fi": "Turun hiippakunnan paimenmuisto 1554–1721 (SKS) > " + pref,
+                "sv": "Turun hiippakunnan paimenmuisto 1554–1721 (SKS) > " + pref,
+                "en": "Turun hiippakunnan paimenmuisto 1554–1721 (SKS) > " + pref,
+                "se": "Turku bismagotti báimmanmuitu 1554-1721 (SKS) > " + pref
             }[getLang];
         }
         if (key === "sksDescriptionText") {
@@ -33,7 +51,7 @@ SKS = {
     initialize: function() {
         var context = {
             opened: Boolean(SKS.isOpen),
-            sksCaption: SKS.getTranslation("sksCaption"),
+            sksCaption: SKS.caption,
             sksDescriptionText: SKS.getTranslation("sksDescriptionText"),
             sksURN: SKS.address,
         };
@@ -102,8 +120,26 @@ $(function() {
 
         if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
             // single object value with SKS URN, proceed to render
+            console.log("sks");
             SKS.address = '//kansallisbiografia.fi/kansallisbiografia/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
             SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
+            SKS.caption = SKS.getTranslation("kansallisbiografia");
+            SKS.widget.render();
+        }
+        else if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
+            // single object value with SKS URN, proceed to render
+            console.log("papisto");
+            SKS.address = '//kansallisbiografia.fi/papisto/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
+            SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
+            SKS.caption = SKS.getTranslation("papisto");
+            SKS.widget.render();
+        }
+        else if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
+            // single object value with SKS URN, proceed to render
+            console.log("paimenmuisto");
+            SKS.address = '//kansallisbiografia.fi/paimenmuisto/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
+            SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
+            SKS.caption = SKS.getTranslation("paimenmuisto");
             SKS.widget.render();
         }
         else {
