@@ -31,7 +31,7 @@ SKS = {
             return {
                 "fi": "Turun hiippakunnan paimenmuisto (SKS) > " + pref,
                 "sv": "Åbo stifts herdaminne (SKS) > " + pref,
-                "en": "Biographical register of clergy of the Turku Diocese (SKS) > " + pref,
+                "en": "Biographical register of the Diocese of Turku (SKS) > " + pref,
                 "se": "Turku bismagotti báimmanmuitu (SKS) > " + pref
             }[getLang];
         }
