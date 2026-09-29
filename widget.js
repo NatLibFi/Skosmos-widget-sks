@@ -1,147 +1,209 @@
 // declaring a namespace for the plugin
-var SKS = SKS || {};
+/* global Vue, VueI18n */
 
-SKS = {
-    address: "", // to be updated
-    getTranslation: function (key) {
-        var getLang = lang;
-        if (lang !== "fi" && lang !== "sv" && lang !== "se") {
-            getLang = "en";
+const SKS = {
+  vueApp: null,
+  createVueApp: function () {
+    return Vue.createApp({
+      data () {
+        return {
+          sksCaption: SKS.caption(),
+          sksDescriptionText: SKS.sksDescriptionText(),
+          sksURN: SKS.address
         }
-        if (key === "kansallisbiografia") {
-            var pref = SKS.preferred_label + $("#pref-label + .prefLabelLang").text();
-            return {
-                "fi": "Kansallisbiografia (SKS) > " + pref,
-                "sv": "Finlands nationalbiografi (SKS) > " + pref, 
-                "en": "The National Biography of Finland (SKS) > " + pref,
-                "se": "Kansallisbiografia - Álbmotbiografiija (SKS) > " + pref
-            }[getLang];
-        }
-        if (key === "papisto") {
-            var pref = SKS.preferred_label + $("#pref-label + .prefLabelLang").text();
-            return {
-                "fi": "Suomen papisto 1800–1920 (SKS) > " + pref,
-                "sv": "Finlands prästerskap 1800–1920 (SKS) > " + pref,
-                "en": "The clergy of Finland 1800–1920 (SKS) > " + pref,
-                "se": "Suoma páhppagoddi 1800–1920 (SKS) > " + pref
-            }[getLang];
-        }
-        if (key === "paimenmuisto") {
-            var pref = SKS.preferred_label + $("#pref-label + .prefLabelLang").text();
-            return {
-                "fi": "Turun hiippakunnan paimenmuisto (SKS) > " + pref,
-                "sv": "Åbo stifts herdaminne (SKS) > " + pref,
-                "en": "Biographical register of the Diocese of Turku (SKS) > " + pref,
-                "se": "Turku bismagotti báimmanmuitu (SKS) > " + pref
-            }[getLang];
-        }
-        if (key === "sksDescriptionText") {
-            return {
-                "fi": "Kaikki artikkelitiivistelmät ja osa artikkeleista vapaasti saatavilla. Pääsy muihin artikkeleihin vain lisenssillä.",
-                "sv": "Alla artikelsammandrag och en del av artiklarna är fritt tillgängliga. Tillgång till andra artiklar kräver licens.", 
-                "en": "All article summaries and some complete articles are freely available. Accessing other articles requires a license.",
-                "se": "Buot artihkalčoahkkáigeasut ja oassi artihkkaliin friija oažžunsajis. Beassan eará artihkkaliidda dušše liseanssain."
-            }[getLang];
-        }
-        else {
-            return "";
-        }
-    },
-    $iframeWrapper: "",
-    initialize: function() {
-        var context = {
-            opened: Boolean(SKS.isOpen),
-            sksCaption: SKS.caption,
-            sksDescriptionText: SKS.getTranslation("sksDescriptionText"),
-            sksURN: SKS.address,
-        };
-        var $template =  $($.parseHTML(Handlebars.compile($('#sks-template').html())(context))[0]);
-        SKS.$iframeWrapper = $template.find("#sks");
-   
-        var $loading = $("<p id='sksSpinner' class='concept-spinner center-block'>" + loading_text + "&hellip;</p>");
-        SKS.$iframeWrapper.prepend($loading);
-        SKS.$iframeWrapper.find('iframe').on('load', function() {
-            SKS.$iframeWrapper.find('#sksSpinner').remove();
-        });
-        
-        if (!SKS.isOpen) {
-            SKS.$iframeWrapper.detach();
-        }
+      },
+      template: `
+                <div
+                  class="sksWidget panel-group"
+                  id="sksAccordion"
+                  role="tablist"
+                  aria-multiselectable="true"
+                >
+                  <div class="panel panel-default">
+                    <div
+                      class="panel-heading"
+                      role="tab"
+                      id="headingSks"
+                    >
+                      <h2>
+                        <button
+                        class="accordion-button accordion"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseSks"
+                        aria-expanded="false"
+                        aria-controls="collapseSks"
+                        >
+                          {{sksCaption}}
+                        </button>
+                      </h2>
+                    </div>
+                      <div
+                      id="collapseSks"
+                      class="panel-collapse collapse show"
+                      role="tabpanel"
+                      aria-labelledby="headingSks"
+                      >
+                      <div class="panel-body">
+                        <div id="sks-description-text-block">
+                          <i class="fa-solid fa-circle-info"></i>
+                          {{sksDescriptionText}}
+                        </div>
+                        <div
+                        id="sks"
+                        class="panel position-sticky"
+                        role="tabpanel"
+                        aria-labelledby="headingSks"
+                        >
+                          <iframe id="sks-frame" :src="sksURN"></iframe>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                `,
+      methods: {
 
-        $template.find('#collapseSks').on('show.bs.collapse', function(e, y) {
-            createCookie('SKS_WIDGET_OPEN', 1);
-            // if the widget has not been opened yet (lazy loading)
-            if (!$template.find('#sks').length) {
-                $('#collapseSks .panel-body').append(SKS.$iframeWrapper);
-            }
-         });
-
-         $template.find('#collapseSks').on('hide.bs.collapse', function(e, y) {
-             createCookie('SKS_WIDGET_OPEN', 0);
-         });
-        $('.concept-info').after($template);
-    },
-    isOpen: true,
-    preferred_label: "",
-    widget: {
-        render: function () {
-            var openCookie = readCookie('SKS_WIDGET_OPEN');
-            SKS.isOpen = openCookie !== null ? parseInt(openCookie, 10) : 1;
-            SKS.initialize();
-        },
+      }
+    })
+  },
+  address: "", // to be updated
+  category: "",
+  setVariables: function (closeMatch) {
+    if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
+      this.address = '//kansallisbiografia.fi/kansallisbiografia/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
+      this.category = 'kansallisbiografia'
     }
+    else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
+      this.address = '//kansallisbiografia.fi/papisto/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
+      this.category = 'papisto'
+    }
+    else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
+      this.address = '//kansallisbiografia.fi/paimenmuisto/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
+      this.category = 'paimenmuisto'
+    }
+  },
+  prefLabel: "",
+  caption: function () {
+      let lang = SKOSMOS.lang
+      if (lang !== "fi" && lang !== "sv" && lang !== "se") {
+        lang = "en"
+      }
+      let captionText = ""
+      const captionTexts = {
+        "kansallisbiografia": {
+          "fi": "Kansallisbiografia (SKS) > ",
+          "sv": "Finlands nationalbiografi (SKS) > ",
+          "en": "The National Biography of Finland (SKS) > ",
+          "se": "Kansallisbiografia - Álbmotbiografiija (SKS) > "
+        },
+        "papisto": {
+          "fi": "Suomen papisto 1800–1920 (SKS) > ",
+          "sv": "Finlands prästerskap 1800–1920 (SKS) > ",
+          "en": "The clergy of Finland 1800–1920 (SKS) > ",
+          "se": "Suoma páhppagoddi 1800–1920 (SKS) > "
+        },
+        "paimenmuisto": {
+          "fi": "Turun hiippakunnan paimenmuisto (SKS) > ",
+          "sv": "Åbo stifts herdaminne (SKS) > ",
+          "en": "Biographical register of the Diocese of Turku (SKS) > ",
+          "se": "Turku bismagotti báimmanmuitu (SKS) > "
+        }
+      }
+      if (this.category in captionTexts) {
+        captionText = captionTexts[this.category][lang] + this.prefLabel
+      }
+      return captionText
+    },
+    sksDescriptionText: function () {
+      return {
+          "fi": "Kaikki artikkelitiivistelmät ja osa artikkeleista vapaasti saatavilla. Pääsy muihin artikkeleihin vain lisenssillä.",
+          "sv": "Alla artikelsammandrag och en del av artiklarna är fritt tillgängliga. Tillgång till andra artiklar kräver licens.",
+          "en": "All article summaries and some complete articles are freely available. Accessing other articles requires a license.",
+          "se": "Buot artihkalčoahkkáigeasut ja oassi artihkkaliin friija oažžunsajis. Beassan eará artihkkaliidda dušše liseanssain."
+        }[SKOSMOS.lang];
+    },
+    appendMountPoint: function () {
+      const mountPoint = document.getElementById('sks-plugin')
+      if (mountPoint) {
+        if (this.vueApp) {
+          this.vueApp.unmount()
+        }
+        mountPoint.remove()
+      }
+      const newMountPoint = document.createElement('div')
+      newMountPoint.id = 'sks-plugin'
+      document.getElementById('main-content-bottom-slot').appendChild(newMountPoint)
+    },
+    render: function () {
+      this.vueApp = this.createVueApp()
+      this.vueApp.mount('#sks-plugin')
+    },
+    remove: function () {
+      if (this.vueApp) {
+        this.vueApp.unmount()
+        this.vueApp = null
+    }
+  },
+  preferred_label: ""
 };
 
-$(function() {
 
-    window.sksWidget = function (data) {
-        // Only activate the widget when
-        // 1) on a concept page
-        // 2) and there is a prefLabel
-        // 3) and the json-ld data can be found
-        // 4) and the latitude and longitude are defined
-        if (data.page !== 'page' || data.prefLabels === undefined || $.isEmptyObject(data["json-ld"])) {
-            return;
-        }
-
-        var correct_jsonld_objects = []; // only a single value is expected
-
-        correct_jsonld_objects = $.grep(data["json-ld"].graph, function (obj) {
-            // only requested URI should have mappings, and, therefore, closeMatch
-            return obj['skos:closeMatch'];
-        });
-
-        if (correct_jsonld_objects.length == 0) {
-            return;
-        }
-        
-        var updated_jsonld_data = correct_jsonld_objects[0];
-        var closeMatch = updated_jsonld_data['skos:closeMatch']; 
-
-        if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
-            // single object value with SKS URN, proceed to render
-            SKS.address = '//kansallisbiografia.fi/kansallisbiografia/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
-            SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
-            SKS.caption = SKS.getTranslation("kansallisbiografia");
-            SKS.widget.render();
-        }
-        else if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
-            // single object value with SKS URN, proceed to render
-            SKS.address = '//kansallisbiografia.fi/papisto/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
-            SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
-            SKS.caption = SKS.getTranslation("papisto");
-            SKS.widget.render();
-        }
-        else if (!$.isArray(closeMatch) && closeMatch.uri.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
-            // single object value with SKS URN, proceed to render
-            SKS.address = '//kansallisbiografia.fi/paimenmuisto/henkilo/' + closeMatch.uri.substr(33).replace(/^0+/, '');
-            SKS.preferred_label = $("span.prefLabel.conceptlabel")[0].innerHTML;
-            SKS.caption = SKS.getTranslation("paimenmuisto");
-            SKS.widget.render();
-        }
-        else {
-            return;
-        }
+document.addEventListener('DOMContentLoaded', function () {
+  window.sksWidget = function (data) {
+    // Only activate the widget when
+    // 1) on a concept page
+    // 2) and there is a prefLabel
+    // 3) and the json-ld data can be found
+    // 4) and the latitude and longitude are defined
+    if (
+      data.pageType !== 'concept' ||
+      data.prefLabels.length === 0 ||
+      Object.keys(data.jsonLd).length === 0
+    )
+    {
+      SKS.remove()
+      return
     }
 
-});
+    //const correct_jsonld_objects = (data && data["json-ld"] && data["jsonLd"].graph || []) .filter(obj => obj['skos:closeMatch'])
+    const context = data.jsonLd['@context']
+    const jsonLdUriSpace = Object.keys(context).find(key => context[key] === window.SKOSMOS.uriSpace)
+    const skosmosUriSpace = window.SKOSMOS.uriSpace
+    const jsonLdUri = data.uri.replace(skosmosUriSpace, jsonLdUriSpace + ':')
+    const closeMatches = []
+    for (const concept of data["jsonLd"].graph) {
+      if (concept.uri === jsonLdUri) {
+        if (Array.isArray(concept['skos:closeMatch'])) {
+          for (const cm of concept['skos:closeMatch']) {
+            if (cm.uri.startsWith('http://urn.fi/urn:nbn:fi:sks')) {
+              closeMatches.push(cm.uri)
+            }
+          }
+        } else {
+          if ('skos:closeMatch' in concept && concept['skos:closeMatch'].uri.startsWith('http://urn.fi/urn:nbn:fi:sks')) {
+            closeMatches.push(concept['skos:closeMatch'].uri)
+          }
+        }
+      }
+    }
+
+    if (closeMatches.length == 0) {
+        return;
+    }
+
+    const closeMatch = closeMatches[0]
+    SKS.prefLabel = data.prefLabels.find(item => item.lang === 'fi').label
+    if (SKS.prefLabel === null) {
+      SKS.remove()
+      return
+    }
+
+    SKS.appendMountPoint()
+    if (!Array.isArray(closeMatch)) {
+      SKS.setVariables(closeMatch)
+      SKS.render()
+    }
+    return
+  }
+})
