@@ -168,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // 1) on a concept page
     // 2) and there is a prefLabel
     // 3) and the json-ld data can be found
-    // 4) and the latitude and longitude are defined
     if (
       data.pageType !== 'concept' ||
       data.prefLabels.length === 0 ||
@@ -178,7 +177,6 @@ document.addEventListener('DOMContentLoaded', function () {
       return
     }
 
-    // const correct_jsonld_objects = (data && data["json-ld"] && data["jsonLd"].graph || []) .filter(obj => obj['skos:closeMatch'])
     const context = data.jsonLd['@context']
     const jsonLdUriSpace = Object.keys(context).find(key => context[key] === window.SKOSMOS.uriSpace)
     const skosmosUriSpace = window.SKOSMOS.uriSpace

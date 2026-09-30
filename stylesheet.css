@@ -34,7 +34,7 @@
 }
 
 #headingSks {
-  background-color: #fff;
+  background-color: var(--white-color);
 }
 
 #headingSks .accordion-button {
