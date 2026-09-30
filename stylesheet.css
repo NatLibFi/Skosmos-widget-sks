@@ -2,7 +2,6 @@
  * Stylesheet for the widget. Designed for finto.fi. *
  *   */
 #sksAccordion.concept-widget {
-  /* border-top: 2px solid #394554; */
   margin-top: .2rem;
 }
 
@@ -12,56 +11,12 @@
   box-shadow: none;
 }
 
-#collapseSks > .panel-body {
-  padding: 0;
-  border-top: 0;
-  background: var(--gray-200);
-}
-
-/* Setting scrollbar style separately in Firefox */
-@-moz-document url-prefix() {
-  #sks-frame {
-    scrollbar-color: var(--scrollbar-thumb) var(--search-dropdown-bg);
-  }
-}
-
-/* Setting scrollbar style for Webkit based browsers (Chrome, Safari, Edge, etc) */
-#sks-frame::-webkit-scrollbar {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-#sks-frame::-webkit-scrollbar:vertical {
-  width: 15px;
-}
-
-#sks-frame::-webkit-scrollbar-thumb {
-  border-radius: 0;
-  border: 1px solid var(--scrollbar-thumb);
-  background-color: var(--scrollbar-thumb);
-}
-
-#sks-frame::-webkit-scrollbar-track {
-  background-color: var(--search-dropdown-bg);
-  border-radius: 0;
-}
-
 #sks-description-text-block {
   background-color: var(--secondary-light-color);
   padding-top: 0.5rem;
   padding-right: 1rem;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
-  /* border-bottom: 2px solid #d4edeb;
-  font-size: var(--font-size);
-  color: var(--gray-900);
-  --font-family: 'Fira Sans', sans-serif;
-  background-repeat: no-repeat;
-  background-size: 16px 16px;
-  background-position-x: 1em;
-  background-position-y: 10px;
-  padding-left: 33px; */
   font-size: 0.85rem;
 }
 
@@ -78,18 +33,8 @@
   width: 100%;
 }
 
-#sksSpinner {
-  background: url("../../resource/pics/alt.gif") no-repeat transparent;
-  background-position: center 140px;
-  padding-top: 190px;
-  color: #474b4f;
-}
-
 #headingSks {
   background-color: #fff;
-  font-size: 16px;
-  border-bottom: 1px solid #bbb;
-  --font-family: 'Fira Sans', sans-serif;
 }
 
 #headingSks .accordion-button {
@@ -101,6 +46,22 @@
   font-family: var(--font-family);
   font-weight: bold;
   font-size: 1.2rem;
-  color: var(--dark-color);
-  margin-top: .2rem;
+}
+
+#sksPanel {
+  border-top: 1px solid var(--light-color);
+  background-color: var(--white-color);
+  padding-top: 0.5rem;
+  padding-right: 1rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+}
+
+#sksPanel a {
+  font-size: 1rem;
+  font-weight: lighter;
+}
+
+#sksPanel a:hover {
+  text-decoration: underline;
 }

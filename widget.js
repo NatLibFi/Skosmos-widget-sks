@@ -9,7 +9,8 @@ const SKS = {
         return {
           sksCaption: SKS.caption(),
           sksDescriptionText: SKS.sksDescriptionText(),
-          sksURN: SKS.address
+          sksURN: SKS.address,
+          sksAnchorText: SKS.anchorText()
         }
       },
       template: `
@@ -25,7 +26,7 @@ const SKS = {
                       role="tab"
                       id="headingSks"
                     >
-                      <h2>
+                      <h3 class="mb-0">
                         <button
                         class="accordion-button accordion"
                         type="button"
@@ -36,7 +37,7 @@ const SKS = {
                         >
                           {{sksCaption}}
                         </button>
-                      </h2>
+                      </h3>
                     </div>
                       <div
                       id="collapseSks"
@@ -55,7 +56,10 @@ const SKS = {
                         role="tabpanel"
                         aria-labelledby="headingSks"
                         >
-                          <iframe id="sks-frame" :src="sksURN"></iframe>
+                          <iframe id="sksFrame" :src="sksURN"></iframe>
+                        </div>
+                        <div id="sksPanel">
+                          <a :href=sksURN target="_blank">{{sksAnchorText}}</a>
                         </div>
                       </div>
                     </div>
@@ -68,6 +72,18 @@ const SKS = {
     })
   },
   address: "", // to be updated
+  anchorText: function () {
+    let lang = SKOSMOS.lang
+    if (lang !== "fi" && lang !== "sv" && lang !== "se") {
+      lang = "en"
+    }
+    return {
+      "fi": "Katso SKS:n Henkilöhistoria-sivu",
+      "sv": "Se Finska Litteratursällskapets biografisida",
+      "en": "See the Finnish Literature Society biography page",
+      "se": ""
+    }[lang]
+  },
   category: "",
   setVariables: function (closeMatch) {
     if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
