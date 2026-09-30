@@ -1,5 +1,5 @@
 // declaring a namespace for the plugin
-/* global Vue, VueI18n */
+/* global Vue */
 
 const SKS = {
   vueApp: null,
@@ -71,99 +71,96 @@ const SKS = {
       }
     })
   },
-  address: "", // to be updated
+  address: '', // to be updated
   anchorText: function () {
-    let lang = SKOSMOS.lang
-    if (lang !== "fi" && lang !== "sv" && lang !== "se") {
-      lang = "en"
+    let lang = window.SKOSMOS.lang
+    if (lang !== 'fi' && lang !== 'sv' && lang !== 'se') {
+      lang = 'en'
     }
     return {
-      "fi": "Katso SKS:n Henkilöhistoria-sivu",
-      "sv": "Se Finska Litteratursällskapets biografisida",
-      "en": "See the Finnish Literature Society biography page",
-      "se": ""
+      fi: 'Katso SKS:n Henkilöhistoria-sivu',
+      sv: 'Se Finska Litteratursällskapets biografisida',
+      en: 'See the Finnish Literature Society biography page',
+      se: ''
     }[lang]
   },
-  category: "",
+  category: '',
   setVariables: function (closeMatch) {
     if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
       this.address = '//kansallisbiografia.fi/kansallisbiografia/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
       this.category = 'kansallisbiografia'
-    }
-    else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
+    } else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
       this.address = '//kansallisbiografia.fi/papisto/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
       this.category = 'papisto'
-    }
-    else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
+    } else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
       this.address = '//kansallisbiografia.fi/paimenmuisto/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
       this.category = 'paimenmuisto'
     }
   },
-  prefLabel: "",
+  prefLabel: '',
   caption: function () {
-      let lang = SKOSMOS.lang
-      if (lang !== "fi" && lang !== "sv" && lang !== "se") {
-        lang = "en"
+    let lang = window.SKOSMOS.lang
+    if (lang !== 'fi' && lang !== 'sv' && lang !== 'se') {
+      lang = 'en'
+    }
+    let captionText = ''
+    const captionTexts = {
+      kansallisbiografia: {
+        fi: 'Kansallisbiografia (SKS) > ',
+        sv: 'Finlands nationalbiografi (SKS) > ',
+        en: 'The National Biography of Finland (SKS) > ',
+        se: 'Kansallisbiografia - Álbmotbiografiija (SKS) > '
+      },
+      papisto: {
+        fi: 'Suomen papisto 1800–1920 (SKS) > ',
+        sv: 'Finlands prästerskap 1800–1920 (SKS) > ',
+        en: 'The clergy of Finland 1800–1920 (SKS) > ',
+        se: 'Suoma páhppagoddi 1800–1920 (SKS) > '
+      },
+      paimenmuisto: {
+        fi: 'Turun hiippakunnan paimenmuisto (SKS) > ',
+        sv: 'Åbo stifts herdaminne (SKS) > ',
+        en: 'Biographical register of the Diocese of Turku (SKS) > ',
+        se: 'Turku bismagotti báimmanmuitu (SKS) > '
       }
-      let captionText = ""
-      const captionTexts = {
-        "kansallisbiografia": {
-          "fi": "Kansallisbiografia (SKS) > ",
-          "sv": "Finlands nationalbiografi (SKS) > ",
-          "en": "The National Biography of Finland (SKS) > ",
-          "se": "Kansallisbiografia - Álbmotbiografiija (SKS) > "
-        },
-        "papisto": {
-          "fi": "Suomen papisto 1800–1920 (SKS) > ",
-          "sv": "Finlands prästerskap 1800–1920 (SKS) > ",
-          "en": "The clergy of Finland 1800–1920 (SKS) > ",
-          "se": "Suoma páhppagoddi 1800–1920 (SKS) > "
-        },
-        "paimenmuisto": {
-          "fi": "Turun hiippakunnan paimenmuisto (SKS) > ",
-          "sv": "Åbo stifts herdaminne (SKS) > ",
-          "en": "Biographical register of the Diocese of Turku (SKS) > ",
-          "se": "Turku bismagotti báimmanmuitu (SKS) > "
-        }
-      }
-      if (this.category in captionTexts) {
-        captionText = captionTexts[this.category][lang] + this.prefLabel
-      }
-      return captionText
-    },
-    sksDescriptionText: function () {
-      return {
-          "fi": "Kaikki artikkelitiivistelmät ja osa artikkeleista vapaasti saatavilla. Pääsy muihin artikkeleihin vain lisenssillä.",
-          "sv": "Alla artikelsammandrag och en del av artiklarna är fritt tillgängliga. Tillgång till andra artiklar kräver licens.",
-          "en": "All article summaries and some complete articles are freely available. Accessing other articles requires a license.",
-          "se": "Buot artihkalčoahkkáigeasut ja oassi artihkkaliin friija oažžunsajis. Beassan eará artihkkaliidda dušše liseanssain."
-        }[SKOSMOS.lang];
-    },
-    appendMountPoint: function () {
-      const mountPoint = document.getElementById('sks-plugin')
-      if (mountPoint) {
-        if (this.vueApp) {
-          this.vueApp.unmount()
-        }
-        mountPoint.remove()
-      }
-      const newMountPoint = document.createElement('div')
-      newMountPoint.id = 'sks-plugin'
-      document.getElementById('main-content-bottom-slot').appendChild(newMountPoint)
-    },
-    render: function () {
-      this.vueApp = this.createVueApp()
-      this.vueApp.mount('#sks-plugin')
-    },
-    remove: function () {
+    }
+    if (this.category in captionTexts) {
+      captionText = captionTexts[this.category][lang] + this.prefLabel
+    }
+    return captionText
+  },
+  sksDescriptionText: function () {
+    return {
+      fi: 'Kaikki artikkelitiivistelmät ja osa artikkeleista vapaasti saatavilla. Pääsy muihin artikkeleihin vain lisenssillä.',
+      sv: 'Alla artikelsammandrag och en del av artiklarna är fritt tillgängliga. Tillgång till andra artiklar kräver licens.',
+      en: 'All article summaries and some complete articles are freely available. Accessing other articles requires a license.',
+      se: 'Buot artihkalčoahkkáigeasut ja oassi artihkkaliin friija oažžunsajis. Beassan eará artihkkaliidda dušše liseanssain.'
+    }[window.SKOSMOS.lang]
+  },
+  appendMountPoint: function () {
+    const mountPoint = document.getElementById('sks-plugin')
+    if (mountPoint) {
       if (this.vueApp) {
         this.vueApp.unmount()
-        this.vueApp = null
+      }
+      mountPoint.remove()
+    }
+    const newMountPoint = document.createElement('div')
+    newMountPoint.id = 'sks-plugin'
+    document.getElementById('main-content-bottom-slot').appendChild(newMountPoint)
+  },
+  render: function () {
+    this.vueApp = this.createVueApp()
+    this.vueApp.mount('#sks-plugin')
+  },
+  remove: function () {
+    if (this.vueApp) {
+      this.vueApp.unmount()
+      this.vueApp = null
     }
   },
-  preferred_label: ""
-};
-
+  preferred_label: ''
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   window.sksWidget = function (data) {
@@ -176,19 +173,18 @@ document.addEventListener('DOMContentLoaded', function () {
       data.pageType !== 'concept' ||
       data.prefLabels.length === 0 ||
       Object.keys(data.jsonLd).length === 0
-    )
-    {
+    ) {
       SKS.remove()
       return
     }
 
-    //const correct_jsonld_objects = (data && data["json-ld"] && data["jsonLd"].graph || []) .filter(obj => obj['skos:closeMatch'])
+    // const correct_jsonld_objects = (data && data["json-ld"] && data["jsonLd"].graph || []) .filter(obj => obj['skos:closeMatch'])
     const context = data.jsonLd['@context']
     const jsonLdUriSpace = Object.keys(context).find(key => context[key] === window.SKOSMOS.uriSpace)
     const skosmosUriSpace = window.SKOSMOS.uriSpace
     const jsonLdUri = data.uri.replace(skosmosUriSpace, jsonLdUriSpace + ':')
     const closeMatches = []
-    for (const concept of data["jsonLd"].graph) {
+    for (const concept of data.jsonLd.graph) {
       if (concept.uri === jsonLdUri) {
         if (Array.isArray(concept['skos:closeMatch'])) {
           for (const cm of concept['skos:closeMatch']) {
@@ -204,8 +200,8 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    if (closeMatches.length == 0) {
-        return;
+    if (closeMatches.length === 0) {
+      return
     }
 
     const closeMatch = closeMatches[0]
@@ -220,6 +216,5 @@ document.addEventListener('DOMContentLoaded', function () {
       SKS.setVariables(closeMatch)
       SKS.render()
     }
-    return
   }
 })
