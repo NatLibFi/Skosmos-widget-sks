@@ -1,14 +1,8 @@
 /*
  * Stylesheet for the widget. Designed for finto.fi. *
  *   */
-#sksAccordion.concept-widget {
-  margin-top: .2rem;
-}
-
-#sksAccordion.concept-widget > .panel {
-  border-radius: 0;
-  border: 0;
-  box-shadow: none;
+#sksAccordion {
+  margin-top: 1rem;
 }
 
 #sks-description-text-block {
