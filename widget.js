@@ -85,15 +85,15 @@ const SKS = {
     }[lang]
   },
   category: '',
-  setVariables: function (closeMatch) {
-    if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
-      this.address = '//kansallisbiografia.fi/kansallisbiografia/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
+  setVariables: function (match) {
+    if (match.startsWith('http://urn.fi/urn:nbn:fi:sks-kbg-')) {
+      this.address = '//kansallisbiografia.fi/kansallisbiografia/henkilo/' + match.substr(33).replace(/^0+/, '')
       this.category = 'kansallisbiografia'
-    } else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
-      this.address = '//kansallisbiografia.fi/papisto/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
+    } else if (match.startsWith('http://urn.fi/urn:nbn:fi:sks-spa-')) {
+      this.address = '//kansallisbiografia.fi/papisto/henkilo/' + match.substr(33).replace(/^0+/, '')
       this.category = 'papisto'
-    } else if (closeMatch.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
-      this.address = '//kansallisbiografia.fi/paimenmuisto/henkilo/' + closeMatch.substr(33).replace(/^0+/, '')
+    } else if (match.startsWith('http://urn.fi/urn:nbn:fi:sks-thp-')) {
+      this.address = '//kansallisbiografia.fi/paimenmuisto/henkilo/' + match.substr(33).replace(/^0+/, '')
       this.category = 'paimenmuisto'
     }
   },
@@ -181,28 +181,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const jsonLdUriSpace = Object.keys(context).find(key => context[key] === window.SKOSMOS.uriSpace)
     const skosmosUriSpace = window.SKOSMOS.uriSpace
     const jsonLdUri = data.uri.replace(skosmosUriSpace, jsonLdUriSpace + ':')
-    const closeMatches = []
+    const matches = []
+    const matchTypes = ['skos:exactMatch', 'skos:closeMatch']
     for (const concept of data.jsonLd.graph) {
-      if (concept.uri === jsonLdUri) {
-        if (Array.isArray(concept['skos:closeMatch'])) {
-          for (const cm of concept['skos:closeMatch']) {
-            if (cm.uri.startsWith('http://urn.fi/urn:nbn:fi:sks')) {
-              closeMatches.push(cm.uri)
+      for (const matchType of matchTypes) {
+        if (concept.uri === jsonLdUri) {
+          if (Array.isArray(concept[matchType])) {
+            for (const cm of concept[matchType]) {
+              if (cm.uri.startsWith('http://urn.fi/urn:nbn:fi:sks')) {
+                matches.push(cm.uri)
+              }
             }
-          }
-        } else {
-          if ('skos:closeMatch' in concept && concept['skos:closeMatch'].uri.startsWith('http://urn.fi/urn:nbn:fi:sks')) {
-            closeMatches.push(concept['skos:closeMatch'].uri)
+          } else {
+            console.log(matchType)
+            if (matchType in concept && concept[matchType].uri.startsWith('http://urn.fi/urn:nbn:fi:sks')) {
+              matches.push(concept[matchType].uri)
+            }
           }
         }
       }
     }
 
-    if (closeMatches.length === 0) {
+    if (matches.length === 0) {
       return
     }
 
-    const closeMatch = closeMatches[0]
+    const match = matches[0]
     SKS.prefLabel = data.prefLabels.find(item => item.lang === 'fi').label
     if (SKS.prefLabel === null) {
       SKS.remove()
@@ -210,8 +214,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     SKS.appendMountPoint()
-    if (!Array.isArray(closeMatch)) {
-      SKS.setVariables(closeMatch)
+    if (!Array.isArray(match)) {
+      SKS.setVariables(match)
       SKS.render()
     }
   }
