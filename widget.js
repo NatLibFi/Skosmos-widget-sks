@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const jsonLdUri = data.uri.replace(skosmosUriSpace, jsonLdUriSpace + ':')
     const matches = []
     const matchTypes = ['skos:exactMatch', 'skos:closeMatch']
+
     for (const concept of data.jsonLd.graph) {
       for (const matchType of matchTypes) {
         if (concept.uri === jsonLdUri) {
@@ -193,7 +194,6 @@ document.addEventListener('DOMContentLoaded', function () {
               }
             }
           } else {
-            console.log(matchType)
             if (matchType in concept && concept[matchType].uri.startsWith('http://urn.fi/urn:nbn:fi:sks')) {
               matches.push(concept[matchType].uri)
             }
@@ -203,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (matches.length === 0) {
+      SKS.remove()
       return
     }
 
