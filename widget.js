@@ -17,16 +17,14 @@ const SKS = {
                 <div
                   class="sksWidget panel-group"
                   id="sksAccordion"
-                  role="tablist"
                   aria-multiselectable="true"
                 >
                   <div class="panel panel-default">
                     <div
                       class="panel-heading"
-                      role="tab"
                       id="headingSks"
                     >
-                      <h3 class="mb-0">
+                      <h2 class="mb-0">
                         <button
                         class="accordion-button accordion"
                         type="button"
@@ -37,12 +35,11 @@ const SKS = {
                         >
                           {{sksCaption}}
                         </button>
-                      </h3>
+                      </h2>
                     </div>
                       <div
                       id="collapseSks"
                       class="panel-collapse collapse show"
-                      role="tabpanel"
                       aria-labelledby="headingSks"
                       >
                       <div class="panel-body">
@@ -53,7 +50,6 @@ const SKS = {
                         <div
                         id="sks"
                         class="panel position-sticky"
-                        role="tabpanel"
                         aria-labelledby="headingSks"
                         >
                           <iframe id="sksFrame" :src="sksURN"></iframe>
