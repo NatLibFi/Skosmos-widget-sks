@@ -77,7 +77,7 @@ const SKS = {
       fi: 'Katso SKS:n Henkilöhistoria-sivu',
       sv: 'Se Finska Litteratursällskapets biografisida',
       en: 'See the Finnish Literature Society biography page',
-      se: ''
+      se: 'Geahča SKS persovdnahistorjá-siiddu'
     }[lang]
   },
   category: '',
