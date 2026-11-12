@@ -15,46 +15,45 @@ const SKS = {
       },
       template: `
                 <div
-                  class="sksWidget panel-group"
+                  class="accordion"
                   id="sksAccordion"
                   aria-multiselectable="true"
                 >
-                  <div class="panel panel-default">
-                    <div
-                      class="panel-heading"
+                  <div class="accordion-item">
+                    <h2
+                      class="accordion-header"
                       id="headingSks"
                     >
-                      <h2 class="mb-0">
-                        <button
-                        class="accordion-button accordion"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseSks"
-                        aria-expanded="false"
-                        aria-controls="collapseSks"
-                        >
-                          {{sksCaption}}
-                        </button>
-                      </h2>
+                      <button
+                      class="accordion-button accordion"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseSks"
+                      aria-expanded="false"
+                      aria-controls="collapseSks"
+                      >
+                        {{sksCaption}}
+                      </button>
+                    </h2>
                     </div>
                       <div
                       id="collapseSks"
-                      class="panel-collapse collapse show"
+                      class="accordion-collapse collapse show"
                       aria-labelledby="headingSks"
                       >
-                      <div class="panel-body">
+                      <div class="accordion-body">
                         <div id="sks-description-text-block">
                           <i class="fa-solid fa-circle-info"></i>
                           {{sksDescriptionText}}
                         </div>
                         <div
-                        id="sks"
-                        class="panel position-sticky"
-                        aria-labelledby="headingSks"
+                          id="sks"
+                          class="panel position-sticky"
+                          aria-labelledby="headingSks"
                         >
                           <iframe id="sksFrame" :src="sksURN"></iframe>
                         </div>
-                        <div id="sksPanel">
+                        <div id="sksLink">
                           <a :href=sksURN target="_blank">{{sksAnchorText}}</a>
                         </div>
                       </div>
